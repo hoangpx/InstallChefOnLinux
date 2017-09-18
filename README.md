@@ -51,8 +51,8 @@ if [ ! $(which chef-server-ctl) ]; then
   while (curl http://localhost:8000/_status) | grep "fail"; do sleep 15s; done
 
   echo "Creating initial user and organization..."
-  chef-server-ctl user-create chefadmin Chef Admin admin@hoangpx.com insecurepassword --filename /drop/chefadmin.pem
-  chef-server-ctl org-create hoangpx "hoangpx, Inc." --association_user chefadmin --filename hoangpx-validator.pem
+  chef-server-ctl user-create chefadmin Chef Admin admin@jeppesen.com insecurepassword --filename /drop/chefadmin.pem
+  chef-server-ctl org-create jeppesen "Jeppesen, Inc." --association_user chefadmin --filename jeppesen-validator.pem
 fi
 
 echo "Your Chef server is ready!"
@@ -105,14 +105,14 @@ which ruby
 
 ### Copy pem file from server to workstation
 
-```scp chef@10.44.62.11:/home/chef/hoangpx-validator.pem ~/
+```scp chef@10.44.62.11:/home/chef/jeppesen-validator.pem ~/
 scp chef@10.44.62.11:/home/chef/chefadmin.pem ~/
 
 scp chefadmin.pem 192.168.20.151:/home/hpham@DAA.LOCAL/Desktop
-scp hoangpx-validator.pem 192.168.20.151:/home/hpham@DAA.LOCAL/Desktop
+scp jeppesen-validator.pem 192.168.20.151:/home/hpham@DAA.LOCAL/Desktop
 
 scp chefadmin.pem chef-workstation@10.44.62.16:/home/chef-workstation/chef-repo/.chef/chefadmin.pem
-scp hoangpx-validator.pem chef-workstation@10.44.62.16:/home/chef-workstation/chef-repo/.chef/hoangpx-validator.pem
+scp jeppesen-validator.pem chef-workstation@10.44.62.16:/home/chef-workstation/chef-repo/.chef/jeppesen-validator.pem
 ```
 
 
@@ -123,9 +123,9 @@ log_level                :info
 log_location             STDOUT
 node_name                "adminchef"
 client_key               "#{current_dir}/chefadmin.pem"
-validation_client_name   "hoangpx-validator"
-validation_key           "#{current_dir}/hoangpx-validator.pem"
-chef_server_url          "https://10.44.62.11/organizations/hoangpx"
+validation_client_name   "jeppesen-validator"
+validation_key           "#{current_dir}/jeppesen-validator.pem"
+chef_server_url          "https://10.44.62.11/organizations/jeppesen"
 syntax_check_cache_path  "#{ENV['HOME']}/.chef/syntaxcache"
 cookbook_path ["#{current_dir}/../cookbooks"]
 ```
@@ -136,7 +136,7 @@ knife ssl fetch
 knife client list
 ```
 
-output should be ```hoangpx-validator```
+output should be ```jeppesen-validator```
 
 ### Install push job on Workstation
 ```chef gem install knife-push
@@ -158,6 +158,9 @@ upload push job
 knife cookbook upload --all
 ```
 
+## Install Chef client (This should be automatically installed when everything is ready)
+```curl -L https://www.chef.io/chef/install.sh | sudo bash```
+
 How to run push job
 Run chef-client from client as:
 ```sudo chef-client –r "recipe[push-jobs]"```
@@ -175,12 +178,29 @@ Run your commands/script from workstation as:
 
 ```knife job start 'my_script.sh' <my_node>```
 
-
-## Install Chef client (This should be automatically installed when everything is ready)
-```curl -L https://www.chef.io/chef/install.sh | sudo bash```
-
 Note
 ```jmeter 10.44.62.15
 chef 10.44.62.11
 workstation 10.44.62.16
 ```
+
+### To run command from workstaion 
+Add command to whitelist in push-job/attributes/default.rb
+
+```default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','mkdir' => 'sudo mkdir /opt/disnhau'}```
+
+Upload cookbook
+
+```knife cookbook upload push-jobs```
+
+Run chef-client to sync
+
+```knife job start "chef-client" igs-chef-client.daa.local ```
+          
+Run command
+
+```knife job start mkdir <my_node>```
+
+          
+[https://muktaaa.wordpress.com/2015/04/28/chef-push-jobs/]
+
