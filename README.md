@@ -158,9 +158,6 @@ upload push job
 knife cookbook upload --all
 ```
 
-## Install Chef client (This should be automatically installed when everything is ready)
-```curl -L https://www.chef.io/chef/install.sh | sudo bash```
-
 How to run push job
 Run chef-client from client as:
 ```sudo chef-client –r "recipe[push-jobs]"```
@@ -177,6 +174,10 @@ Run your recipe from workstation as:
 Run your commands/script from workstation as:
 
 ```knife job start 'my_script.sh' <my_node>```
+
+
+## Install Chef client (This should be automatically installed when everything is ready)
+```curl -L https://www.chef.io/chef/install.sh | sudo bash```
 
 Note
 ```jmeter 10.44.62.15
