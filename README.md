@@ -152,14 +152,15 @@ default['push_jobs']['package_version']             = nil
 # These variables control whether we validate ssl
 default['push_jobs']['chef']['verify_api_cert']     = false
 default['push_jobs']['chef']['ssl_verify_mode']     = :verify_none
+
+default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','push-jobs' =>'chef-client -r "recipe[push-jobs]"'}
 ```
+
 upload push job
+
 ```
 knife cookbook upload --all
 ```
-
-## Install Chef client (This should be automatically installed when everything is ready)
-```curl -L https://www.chef.io/chef/install.sh | sudo bash```
 
 How to run push job
 Run chef-client from client as:
@@ -185,22 +186,31 @@ workstation 10.44.62.16
 ```
 
 ### To run command from workstaion 
-Add command to whitelist in push-job/attributes/default.rb
+Add command ***sudo*** to whitelist in push-job/attributes/default.rb
 
-```default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','mkdir' => 'sudo mkdir /opt/disnhau'}```
+```default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','push-jobs' =>'chef-client -r "recipe[push-jobs]"',
+'createSudoer' => 'chef-client -r "recipe[sudo]"'}```
 
 Upload cookbook
 
-```knife cookbook upload push-jobs```
+```knife cookbook upload sudo```
 
-Run chef-client to sync
+or upload all
 
-```knife job start "chef-client" igs-chef-client.daa.local ```
+```knife cookbook upload --all```
+
+Run push-jobs to sync whitelist with client
+
+```knife job start push-jobs igs-chef-client.daa.local ```
           
 Run command
 
-```knife job start mkdir <my_node>```
+```knife job start sudo <my_node>```
 
           
 [https://muktaaa.wordpress.com/2015/04/28/chef-push-jobs/]
+
+
+## Install Chef client (This should be automatically installed when everything is ready)
+```curl -L https://www.chef.io/chef/install.sh | sudo bash```
 
