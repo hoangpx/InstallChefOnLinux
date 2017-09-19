@@ -185,18 +185,19 @@ chef 10.44.62.11
 workstation 10.44.62.16
 ```
 
-### To run command from workstaion 
-Add command ***sudo*** to whitelist in push-job/attributes/default.rb
-
-```default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','push-jobs' =>'chef-client -r "recipe[push-jobs]"','createSudoer' => 'chef-client -r "recipe[sudo]"'}```
-
-Upload cookbook
+### To run a recipe from workstaion 
+Upload cookbook to server
 
 ```knife cookbook upload sudo```
 
 or upload all
 
 ```knife cookbook upload --all```
+
+Add recipe ***sudo*** named ***createSudoer*** to whitelist in push-job/attributes/default.rb
+
+```default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','push-jobs' =>'chef-client -r "recipe[push-jobs]"','createSudoer' => 'chef-client -r "recipe[sudo]"'}```
+
 
 Run push-jobs to sync whitelist with client
 
