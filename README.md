@@ -204,7 +204,7 @@ Run push-jobs to sync whitelist with client
           
 Run command
 
-```knife job start sudo <my_node>```
+```knife job start createSudoer <my_node>```
 
           
 [https://muktaaa.wordpress.com/2015/04/28/chef-push-jobs/]
