@@ -188,8 +188,7 @@ workstation 10.44.62.16
 ### To run command from workstaion 
 Add command ***sudo*** to whitelist in push-job/attributes/default.rb
 
-```default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','push-jobs' =>'chef-client -r "recipe[push-jobs]"',
-'createSudoer' => 'chef-client -r "recipe[sudo]"'}```
+```default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','push-jobs' =>'chef-client -r "recipe[push-jobs]"','createSudoer' => 'chef-client -r "recipe[sudo]"'}```
 
 Upload cookbook
 
