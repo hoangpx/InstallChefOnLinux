@@ -156,28 +156,11 @@ default['push_jobs']['chef']['ssl_verify_mode']     = :verify_none
 default['push_jobs']['whitelist'] = { 'chef-client' => 'chef-client','push-jobs' =>'chef-client -r "recipe[push-jobs]"'}
 ```
 
-upload push job
-
-```
-knife cookbook upload --all
-```
-
-How to run push job
-Run chef-client from client as:
-```sudo chef-client –r "recipe[push-jobs]"```
-
 Check status of current available node 
 ```
 knife node status
 knife node status <node-name>
 ```
-Run your recipe from workstation as:
-
-```knife job start 'chef-client –r recipe[push-job]' <node-name>```
-
-Run your commands/script from workstation as:
-
-```knife job start 'my_script.sh' <my_node>```
 
 Note
 ```jmeter 10.44.62.15
@@ -190,9 +173,6 @@ Upload cookbook to server
 
 ```knife cookbook upload sudo```
 
-or upload all
-
-```knife cookbook upload --all```
 
 Add recipe ***sudo*** named ***createSudoer*** to whitelist in push-job/attributes/default.rb
 
